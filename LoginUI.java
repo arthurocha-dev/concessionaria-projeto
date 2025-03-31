@@ -1,6 +1,7 @@
 package pacote;
 
 import java.awt.EventQueue;
+import java.sql.*;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

@@ -24,6 +24,8 @@ public class LoginUI extends JFrame {
 	private JPanel contentPane;
 	private JTextField textNome;
 	private JTextField inputNomeL;
+	private JTextField textCPF;
+	private JTextField textEmail;
 	
 	
 
@@ -66,21 +68,17 @@ public class LoginUI extends JFrame {
 		
 		JLabel lblCpf = new JLabel("CPF:");
 		lblCpf.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblCpf.setBounds(84, 120, 46, 14);
+		lblCpf.setBounds(84, 160, 46, 14);
 		getContentPane().add(lblCpf);
 		
-		
-		MaskFormatter mascaraCpf = new MaskFormatter("************");
-		JFormattedTextField formattedCpfL = new JFormattedTextField(mascaraCpf);
-		formattedCpfL.setBounds(84, 132, 218, 20);
-		getContentPane().add(formattedCpfL);
 		
 		JButton btnEntrar = new JButton("Entrar");
 		btnEntrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (inputNomeL.getText().equals(CadastroUI.getNomeUsuario()) && new String(formattedCpfL.getText()).equals(CadastroUI.getCpfUsuario())) {
-					JOptionPane.showMessageDialog(null, "Login efetuado com sucesso!");
-					Menu menu = new Menu();
+				if (CadastroUI.verificarUsuario(nome, CPF )) {
+				    System.out.println("Usuário encontrado no banco de dados!");
+				
+				 	Menu menu = new Menu();
 					menu.setVisible(true);
 					dispose();
 					
@@ -94,6 +92,21 @@ public class LoginUI extends JFrame {
 		btnEntrar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnEntrar.setBounds(148, 206, 89, 23);
 		getContentPane().add(btnEntrar);
+		
+		textCPF = new JTextField();
+		textCPF.setBounds(84, 175, 218, 20);
+		getContentPane().add(textCPF);
+		textCPF.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("Email:");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblNewLabel.setBounds(84, 110, 46, 14);
+		getContentPane().add(lblNewLabel);
+		
+		textEmail = new JTextField();
+		textEmail.setBounds(84, 129, 218, 20);
+		getContentPane().add(textEmail);
+		textEmail.setColumns(10);
 	}
 
 	/**

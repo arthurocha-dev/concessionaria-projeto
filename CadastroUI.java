@@ -2,169 +2,248 @@ package pacote;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.text.ParseException;
-
+import java.util.regex.Pattern;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import pacote.LoginUI;
 
 public class CadastroUI extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private  JTextField inputNome;
-	private JTextField inputEndereco;
-	private static String nomeUsuario;
-	private static String telefoneUsuario;
-	private static String cpfUsuario;
-	private static String enederecoUsuario;
-	private JFormattedTextField formattedCpf;
-	private JFormattedTextField formattedTelefone;
+	 private JTextField txtNome, txtEmail;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CadastroUI frame = new CadastroUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	    private JButton btnRegistrar;
+	    private JTextField textTelef;
+	    private JTextField textEnder;
+	    private JTextField textCPF;
 
-	/**
-	 * Create the frame.
-	 * @throws ParseException 
-	 */
-	public CadastroUI() throws ParseException {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JLabel lblCadastro = new JLabel("Cadastro");
-		lblCadastro.setFont(new Font("Tahoma", Font.BOLD, 25));
-		lblCadastro.setBounds(146, 0, 117, 30);
-		contentPane.add(lblCadastro);
-		
-		JLabel lblNome = new JLabel("Nome:");
-		lblNome.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblNome.setBounds(71, 41, 86, 14);
-		contentPane.add(lblNome);
-		
-		inputNome = new JTextField();
-		inputNome.setBounds(71, 55, 253, 20);
-		contentPane.add(inputNome);
-		inputNome.setColumns(10);
-		
-		JLabel lblCpf = new JLabel("CPF:\r\n");
-		lblCpf.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblCpf.setBounds(71, 77, 46, 33);
-		contentPane.add(lblCpf);
-		
-		
-		
-		JLabel lblTelefone = new JLabel("Telefone:");
-		lblTelefone.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblTelefone.setBounds(71, 129, 86, 14);
-		contentPane.add(lblTelefone);
-		
-		
-		
-		JButton btnNewButton = new JButton("Cadastrar");
-		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			  nomeUsuario = inputNome.getText();
-			  telefoneUsuario = formattedTelefone.getText(); 
-			  cpfUsuario = formattedCpf.getText();
-			  enederecoUsuario = inputEndereco.getText();
-			  
-			  JOptionPane.showMessageDialog(null, "Cadastro realizado");
-			  
-			  LoginUI login = null;
-			try {
-				login = new LoginUI();
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			  login.setVisible(true);
-			  dispose();
-			  
-			 
-			}
-		});
-		btnNewButton.setBounds(163, 227, 92, 23);
-		contentPane.add(btnNewButton);
-		
-		
-		MaskFormatter mascaraNumero = new MaskFormatter ("############");
-	    formattedTelefone = new JFormattedTextField(mascaraNumero);
-		formattedTelefone.setBounds(71, 143, 253, 20);
-		contentPane.add(formattedTelefone);
-		//mascaraNumero.setValueContainsLiteralCharacters(false);
-		
-		
-		MaskFormatter mascaraCpf = new MaskFormatter("************");
-	    formattedCpf = new JFormattedTextField(mascaraCpf);
-		formattedCpf.setBounds(71, 100, 253, 20);
-		contentPane.add(formattedCpf);
-		
-		JLabel lblEndereco = new JLabel("Endereço:");
-		lblEndereco.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblEndereco.setBounds(71, 174, 72, 14);
-		contentPane.add(lblEndereco);
-		
-		inputEndereco = new JTextField();
-		inputEndereco.setBounds(71, 187, 253, 20);
-		contentPane.add(inputEndereco);
-		inputEndereco.setColumns(10);
-		
-		
-		
-		
-		
-	}
+
+	    public CadastroUI() {
+
+	        setTitle("Cadastro de Usuário");
+
+	        setSize(455, 360);
+
+	        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	        setLocationRelativeTo(null);
+	        getContentPane().setLayout(null);
+
+
+
+	        JLabel label = new JLabel("Nome:");
+	        label.setBounds(38, 4, 39, 29);
+	        getContentPane().add(label);
+
+	        txtNome = new JTextField();
+	        txtNome.setBounds(87, 8, 187, 20);
+
+	        getContentPane().add(txtNome);
+
+
+
+	        JLabel label_1 = new JLabel("Email:");
+	        label_1.setBounds(48, 32, 39, 29);
+	        getContentPane().add(label_1);
+
+	        txtEmail = new JTextField();
+	        txtEmail.setBounds(87, 35, 187, 22);
+
+	        getContentPane().add(txtEmail);
+
+
+
+	        btnRegistrar = new JButton("Registrar Usuário");
+	        btnRegistrar.setBounds(242, 265, 187, 45);
+
+	        getContentPane().add(btnRegistrar);
+
+
+
+	        JLabel label_3 = new JLabel("");
+	        label_3.setBounds(87, 153, 187, 45);
+	        getContentPane().add(label_3); // Espaçamento na grade
+	        
+	        JLabel lblNewLabel = new JLabel("CPF:");
+	        lblNewLabel.setBounds(48, 72, 39, 14);
+	        getContentPane().add(lblNewLabel);
+	        
+	        JLabel lblNewLabel_1 = new JLabel("Telefone:");
+	        lblNewLabel_1.setBounds(37, 100, 50, 14);
+	        getContentPane().add(lblNewLabel_1);
+	        
+	        JLabel lblNewLabel_2 = new JLabel("Endereco:");
+	        lblNewLabel_2.setBounds(37, 125, 50, 14);
+	        getContentPane().add(lblNewLabel_2);
+	        
+	        textTelef = new JTextField();
+	        textTelef.setBounds(87, 97, 187, 20);
+	        getContentPane().add(textTelef);
+	        textTelef.setColumns(10);
+	        
+	        textEnder = new JTextField();
+	        textEnder.setBounds(87, 122, 187, 20);
+	        getContentPane().add(textEnder);
+	        textEnder.setColumns(10);
+	        
+	        textCPF = new JTextField();
+	        textCPF.setBounds(87, 69, 187, 20);
+	        getContentPane().add(textCPF);
+	        textCPF.setColumns(10);
+
+
+
+	        btnRegistrar.addActionListener(new ActionListener() {
+
+	            @Override
+
+	            public void actionPerformed(ActionEvent e) {
+
+	                registrarUsuario();
+
+	            }
+
+	        });
+
+
+
+	        setVisible(true);
+
+	    }
+
+
+
+	    private void registrarUsuario() {
+
+	        String nome = txtNome.getText().trim();
+
+	        String email = txtEmail.getText().trim();
+	        
+	        String CPF = textCPF.getText().trim();
+	        
+	        int telefone = Integer.parseInt(textTelef.getText().trim());
+	        
+	        String endereco = textEnder.getText().trim();
+
+	        
+
+
+
+	        // Verificação de campos vazios
+
+	        if (nome.isEmpty() || email.isEmpty() || CPF.isEmpty() || telefone == 0 || endereco.isEmpty()) {
+
+	            JOptionPane.showMessageDialog(this, "Todos os campos são obrigatórios.", "Erro", JOptionPane.ERROR_MESSAGE);
+
+	            return;
+
+	        }
+
+
+
+	        // Validação do formato do e-mail
+
+	        if (!isValidEmail(email)) {
+
+	            JOptionPane.showMessageDialog(this, "Por favor, insira um e-mail no formato correto.", "Erro", JOptionPane.ERROR_MESSAGE);
+
+	            return;
+
+	        }
+
+
+
+	        // Registro do usuário
+
+	        Cadastro cadastro = new Cadastro();
+
+	        boolean sucesso = cadastro.registerCliente(nome, email, CPF, telefone, endereco);
+
+
+
+	        if (sucesso) {
+
+	            JOptionPane.showMessageDialog(this, "Usuário cadastrado com sucesso!");
+
+	            txtNome.setText("");
+
+	            txtEmail.setText("");
+
+	            textCPF.setText("");
+	            
+	            textTelef.setText("");
+	            
+	            textEnder.setText("");
+
+	        } else {
+
+	            JOptionPane.showMessageDialog(this,
+
+	                "Falha ao cadastrar o usuário. Verifique se a conta já existe ou tente novamente.",
+
+	                "Erro",
+
+	                JOptionPane.ERROR_MESSAGE
+
+	            );
+
+	        }
+
+	    }
+
+
+	    private boolean isValidEmail(String email) {
+
+	        String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+
+	        return Pattern.matches(emailRegex, email);
+
+	    }
+	    
+	    public static boolean verificarUsuario(String nome, String cpf) {
+	        String sql = "SELECT * FROM usuarios WHERE nome = ? AND cpf = ?"; 
+	        
+	        try (Connection conn = ConectionUI.connect();
+	             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+	            stmt.setString(1, nome);
+	            stmt.setString(2, cpf);
+	            
+	            ResultSet rs = stmt.executeQuery();
+
+	            return rs.next(); // Retorna `true` se encontrou o usuário, `false` caso contrário.
+	            
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return false;
+	    }
 	
-	public static String getNomeUsuario() {
-		return nomeUsuario;
-	}
-	
-	public static String getCpfUsuario() {
-		return cpfUsuario;
-	}
-	
-	public static String gettelefoneUsuario() {
-		return telefoneUsuario;
-		
-	}
-	
-	public static String getEnderecoUsuario() {
-		return  enederecoUsuario;
-	}
-	
+
+
+
+	    public static void main(String[] args) {
+
+	        new CadastroUI();
+
+	    }
 }
 
 
